@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/auth.css">
+    <!-- Material Icon CDN -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="../js/dropdown.js"></script>
+
+    <!-- G54) Invertida ordem de leitura dos scripts -->
+    <script src="../js/password_visibility.js" defer></script>
+    <script src="../js/validacaoCpf.js" defer></script>
+    <script src="../js/script.js" defer></script>
+    <script src="../js/buscaUf.js" defer></script>
+
+    <title>Prática JavaScript</title>
+</head>
+
+<body>
+
+  <nav>
+    <div>
+      <a href="../../index.html" class="dropbtn">
+        <i class="menuIcon material-icons">home</i>
+      </a>
+    </div>
+
+    <div class="dropdown">
+      <button class="dropbtn" onclick="mostrarMenu('acountDropdown')">
+        <i class="menuIcon material-icons">account_circle</i>
+      </button>
+
+      <div id="acountDropdown" class="dropdown-content">
+        <a href="#" onclick="mostrarApenasLogin()">Fazer login</a>
+        <hr>
+        <a href="#" onclick="mostrarApenasConta()">Criar conta</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <div id="divHome">
+      <h1>Login e Criação de Conta</h1>
+      
+      <h2>Tela de login</h2>
+
+      <p>Na tela de login, insira um e-mail válido no formato "x@x.x" e uma senha, para então o botão Entrar ser habilitado.</p>
+
+      <p>
+        Perceba que na área de senha há um botão com o desenho de um olho. 
+        Tal botão permite revelar a senha digitada enquanto se mantém o botão clicado.<br> 
+        Também permite que a senha seja digitada sem estar oculta, neste caso, o botão muda seu ícone para indicar que um novo clique causará a ocultação da senha.<br> 
+        No caso quando a senha não está oculta, ao sair da caixa de digitação da senha ela deve voltar a ser ocultada. 
+      </p>
+
+
+      <h2>Tela de criação de nova conta</h2>
+
+      <p>
+        Todos os campos devem ser preenchidos e válidos para a criação de nova conta. 
+       </p>
+  
+      <p>
+        Os campos nome, sobrenome e e-mail não devem estar vazios.<br> O campo e-mail deve conter um e apenas um @, assim como no login.<br> 
+        O campo CPF é validado conforme regras estabelecidas do formato.<br> 
+        Nos campos relacionados à senha é necessário que ambos os campos possuem o mesmo conteúdo (não vazio).<br> 
+        Quando um campo preenchido estiver válido, uma mensagem de status será mostrada em verde; caso contrário, em vermelho, para indicar possíveis problemas no preenchimento dos campos. 
+      </p>
+
+      <p>
+        Ao abrir o formulário de criação de nova conta, todos os campos devem ser resetados (limpar qualquer dado já preenchido anteriormente) e qualquer mensagem de status.
+      </p>
+
+    </div>
+
+    <!-- 
+      Div com id login-body será a tela de login
+    -->
+    <div id="login-body">
+      <h1>Entrar</h1>
+      <form>
+        <label>E-mail:</label><input type="text">
+        <label>Senha:</label>
+        <div class="passwordSpy">
+          <input id="login-password" type="password">
+          <img id="olho" class="olho" src="https://cdn0.iconfinder.com/data/icons/ui-icons-pack/100/ui-icon-pack-14-512.png"
+          onmousedown="mostrarSenha()" onmouseup="ocultarSenha()">
+        </div>
+        
+        <div id="manterConectado"><input type="checkbox"> Manter conectado</div>
+
+        <button id="botaoLogin">Entrar<i class="menuIcon material-icons">login</i></button>
+
+
+        
+        <hr style="border: none; border-top: 1px solid #dee2e6; margin-top: 10px; margin-bottom: 10px; grid-column: 1 / -1;">
+        
+        <label for="dropbtnUf">Estado: </label>
+        <div class="dropdown">
+          <button type="button" id="dropbtnUf" class="dropbtn" onclick="carregaDropdownUf()">Selecione um Estado</button>
+          <div id="dropUf" class="dropdown-content">
+              <!-- Itens da lista de Estados serão inseridos aqui pelo JS -->
+          </div>
+        </div>
+        <p id="loginStatusUF_IBGE">UF</p>
+        
+        <label for="dropbtnCidade">Cidade: </label>
+        <div class="dropdown">
+          <button type="button" id="dropbtnCidade" class="dropbtn" onclick="if (typeof mostrarMenu === 'function') mostrarMenu('dropCidade')">Selecione uma Cidade</button>
+          <div id="dropCidade" class="dropdown-content">
+              <a class="dropdown-item">Selecione um Estado primeiro</a>
+              <!-- Itens da lista de Cidades serão inseridos aqui pelo JS -->
+          </div>
+        </div>
+        <p id="loginStatusCidade_IBGE">Cidade</p>
+
+      </form>
+    </div>
+
+    <!-- 
+      Div com id nova-conta será a tela de login
+    -->
+    <div id="nova-conta"> 
+      <h1><i class="menuIcon material-icons">account_box</i> Criar nova conta</h1>
+      <form>
+        <label>Nome:</label>
+        <input type="text" onblur="validaTextoEmBranco(this, 'statusNome', 'Nome')">
+        <p id="statusNome"></p>
+        
+        <label>Sobrenome:</label>
+        <input type="text" onblur="validaTextoEmBranco(this, 'statusSobrenome', 'Sobrenome')">
+        <p id="statusSobrenome"></p>
+        
+        <label>CPF:</label>
+        <input type="text" onblur="validarCPF(this)">
+        <p id="statusCPF"></p>
+        
+        <label>E-mail:</label>
+        <input type="text">
+        <p id="statusEmail"></p>
+        
+        <label>Senha:</label>
+        <input type="password">
+        <p id="statusSenha"></p>
+        
+        <label>Repita sua senha:</label>
+        <input type="password">
+        <p id="statusRepitaSenha"></p>
+        
+        <hr style="border: none; border-top: 1px solid #dee2e6; margin-top: 10px; margin-bottom: 10px; grid-column: 1 / -1;">
+
+        
+        <label>CEP:</label>
+        <input type="text" id="inputCep" size="10" maxlength="9"
+          onblur="pesquisaCep(this.value);">
+        <p id="statusCep">00000-000</p>
+
+        <label>Logradouro:</label>
+        <input type="text" id="inputLogradouro">
+        <p id="statusLogradouro">Rua</p>
+
+        <label>Bairro:</label>
+        <input type="text" id="inputBairro">
+        <p id="statusBairro">Bairro</p>
+
+        <label>Cidade:</label>
+        <input type="text" id="inputCidade">
+        <p id="statusCidade">Cidade</p>
+
+        <label>Estado:</label>
+        <input type="text" id="inputUF" size="2" maxlength="2">
+        <p id="statusUF">UF</p>
+
+        
+        <div id="areaBotaoConta">
+          <input type="button" value="Criar conta" style="min-width: 100px">
+        </div>
+          
+      </form>
+    </div>
+
+  </main>
+<!--
+  <footer>
+    © INE 5646 - Programação para a web
+  </footer>
+-->  
+</body>
+</html>
